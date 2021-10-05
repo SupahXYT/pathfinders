@@ -10,19 +10,22 @@ class heap():
         return head
 
     def add(self, data):
-        i = 0; parent = int((i-1)/2)
-        # while self.heap[parent] < data:
-        leftchild = i*2+1
-        rightchild = i*2+2
+        self.heap.append(data)
+        self.heapup(len(self.heap) - 1)
 
-        print(f'{parent}, {leftchild}, {rightchild}')
-            # i += 1
+    def heapup(self, i):
+        current = i
+        parent = int((i-1)/2)
 
-
+        while current > 0:
+            if self.heap[current] > self.heap[parent]:
+                self.heap[current], self.heap[parent] = self.heap[parent], self.heap[current]
+            current = parent
+            parent = int((current-1)/2)
 
     def heapdown(self):
         pass
 
     def tostring(self):
-        pass
+        return self.heap
 

@@ -1,9 +1,10 @@
 import Heap
+from random import randrange
 
 heap = Heap.heap()
 
-heap.add(4)
-heap.add(9)
-heap.add(0)
+for i in range(1, 7):
+    random = randrange(1, 10)
+    heap.add(random)
 
-print(heap.tostring())
+print(heap.heap)
