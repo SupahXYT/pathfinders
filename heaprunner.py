@@ -39,18 +39,24 @@ def dijkstra(start, end):
     heap.add(startingpath)
     
     # while 
-    path = heap.remove()
-    current = path.last()
-    if current == end:
-        return path.path
-    # for every neighbor
-    for i in range(len(graph)):
-        print(graph[current][i])
-        if graph[current][i] > 0 and not contains(visited, graph[current][i]):
-            p = path
-            p.add_vertex(current)
-            heap.add(p)
-    return heap.remove().path
+    while not (current == end):
+        path = heap.remove()
+        current = path.last()
+        if current == end:
+            return path.path
+        # for every other node
+        for i in range(len(graph)):
+            # check if neighbor
+            if graph[current][i] > 0 and not contains(visited, i):
+                print(i)
+                print(path.path)
+                p = Path.path(graph)
+                p.path = [i for i in path.path]
+                p.add_vertex(i)
+                heap.add(p)
+                visited.append(current)
+
+    return heap
 
 def contains(list, n):
     for i in range(0, len(list)):
@@ -58,7 +64,9 @@ def contains(list, n):
             return True
     return False
         
-print(dijkstra(1, 2))
+
+shortest = dijkstra(1, 2)
+print(f'path: {shortest.tostring()}')
 
 # def distance(path):
 #     distance = 0

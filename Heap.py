@@ -84,3 +84,16 @@ class path_heap():
         for i in range(0, len(self.heap)):
             self.heapup(i)
 
+    def tostring(self):
+        string = "["
+        for i in range(0, len(self.heap)):
+            string += str(self.heap[i].path)
+            string += str(self.heap[i].distance())
+
+        string += "]"
+        return string
+            
+            
+
+        
+
