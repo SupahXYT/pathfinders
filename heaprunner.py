@@ -22,7 +22,12 @@ def new_graph(v):
 
     return graph
 
-graph = new_graph(3)
+# graph = new_graph(5)
+
+graph = [[0, 3, 1, 1],
+         [3, 0, 0, 3],
+         [2, 0, 0, 0],
+         [1, 3, 0, 0]]
 
 # given two vertices in the graph G this function returns 
 # the shortest path between those two vertices with a path object
@@ -38,8 +43,7 @@ def dijkstra(start, end):
     startingpath.add_vertex(start)
     heap.add(startingpath)
     
-    # while 
-    while not (current == end):
+    while True:
         path = heap.remove()
         current = path.last()
         if current == end:
@@ -54,9 +58,7 @@ def dijkstra(start, end):
                 p.path = [i for i in path.path]
                 p.add_vertex(i)
                 heap.add(p)
-                visited.append(current)
-
-    return heap
+        visited.append(current)
 
 def contains(list, n):
     for i in range(0, len(list)):
@@ -64,9 +66,8 @@ def contains(list, n):
             return True
     return False
         
-
-shortest = dijkstra(1, 2)
-print(f'path: {shortest.tostring()}')
+shortest = dijkstra(2, 1)
+print(f'path: {shortest}')
 
 # def distance(path):
 #     distance = 0
