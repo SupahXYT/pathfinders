@@ -1,13 +1,14 @@
 import pygame 
 from random import randrange
 
-# BLOCKED = 0
-# PASSAGE = 1
-# START = 2
-# END = 3
-
 BLOCKED = 0
 PASSAGE = 1
+START = 2
+END = 3
+VISITED = 4
+
+# BLOCKED = 0
+# PASSAGE = 1
 
 col_bg = (0, 0, 0)
 COL_BG = (0, 0, 0)
@@ -15,14 +16,16 @@ col_nofill = (50, 50, 50)
 col_fill = (255, 255, 255)
 col_start = (0, 255, 0)
 col_dest = (255, 0, 0)
+col_visited = (255, 0, 0)
+
 
 class tile:
-    def __init__(row, col):
+    def __init__(self, row, col):
         self.state = BLOCKED
         self.color = col_nofill
 
 class starting_tile(tile):
-    def __init__(row, col):
+    def __init__(self, row, col):
         super().__init__
         self.color = col_start
 
@@ -65,7 +68,35 @@ class maze:
                     frontiers.append([row+1, col, row+2, col])
                 if col < self.height-3 and self.maze[row][col+2] == BLOCKED:
                     frontiers.append([row, col+1, row, col+2])
-        
+    
+    def dfs(self, start, end):
+        to_visit = []
+        current = start
+
+        while current != end:
+            row = current[0]
+            col = current[1]
+            self.maze[row][col] = VISITED
+            if row > 1 and self.maze[row-1][col] == PASSAGE:
+                to_visit.insert(0, (row-1, col))
+            if row < self.width - 1 and self.maze[row+1][col] == PASSAGE:
+                to_visit.insert(0, (row+1, col))
+            if col > 1 and self.maze[row][col-1] == PASSAGE:
+                to_visit.insert(0, (row, col-1))
+            if col < self.height - 1 and self.maze[row][col+1] == PASSAGE:
+                to_visit.insert(0, (row, col+1))
+            current = to_visit.pop(0)
+        self.maze[current[0]][current[1]] = VISITED
+        return current
+
+    def _print(self, row, col):
+        str = ""
+        for i in range(row-1, row+2):
+            for j in range(col-1, col+2):
+                pass
+
+
+
     def generate_prim(self):
         rand_row, rand_col = self.rand_cell_in_maze()
         rand_row = randrange(self.width)
@@ -187,6 +218,7 @@ class maze_runner:
         self.maze = maze(width, height)
         # self.maze.random_dumb()
         self.maze.prims_algorithm()
+        self.maze.dfs((1, 1),(width - 2, height - 2))
         pygame.display.flip()
 
     def main(self):
@@ -206,14 +238,17 @@ class maze_runner:
         self.display.fill(col_bg)
         for row in range(self.width):
             for col in range(self.height):
-                if(maze[row][col]): 
+                if (maze[row][col] == PASSAGE): 
                     pygame.draw.rect(self.display, col_fill, pygame.Rect(round(row*8), 
+                        round(col*8), round(8), round(8)))
+                elif maze[row][col] == VISITED:
+                    pygame.draw.rect(self.display, col_visited, pygame.Rect(round(row*8), 
                         round(col*8), round(8), round(8)))
                 else:
                     pygame.draw.rect(self.display, col_nofill, pygame.Rect(round(row*8), 
                         round(col*8), round(8), round(8)))
                 
-runner = maze_runner(31, 51)
+runner = maze_runner(101, 101)
 runner.main()
 
 # https://stackoverflow.com/questions/29739751/implementing-a-randomly-generated-maze-using-prims-algorithm
