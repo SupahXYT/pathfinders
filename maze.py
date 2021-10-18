@@ -140,6 +140,7 @@ class maze_runner:
         row, col = start
         while (row, col) != end:
             pass
+            pass
 
     def prims_algorithm(self):
         frontiers = []
