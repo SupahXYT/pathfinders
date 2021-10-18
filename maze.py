@@ -105,6 +105,8 @@ class maze_runner:
         # self.maze.random_dumb()
         self.prims_algorithm()
         self.dfs((1, 1),(width - 2, height - 2))
+        self.next = [[None for i in range(height)] for j in range(width)]
+
         pygame.display.flip()
 
     def main(self):
@@ -132,6 +134,12 @@ class maze_runner:
                 else:
                     pygame.draw.rect(self.display, col_nofill, pygame.Rect(round(row*8), 
                         round(col*8), round(8), round(8)))
+                # if self.adj[row][col] = 
+
+    def draw_shortest_path(self, start, end):
+        row, col = start
+        while (row, col) != end:
+            pass
 
     def prims_algorithm(self):
         frontiers = []
@@ -165,20 +173,25 @@ class maze_runner:
             # right 
             if col < self.height - 1 and self.maze[row][col+1] == PASSAGE:
                 to_visit.append((row, col+1))
+                self.next[row][col] = (row, col+1)
             # down 
             if row < self.width - 1 and self.maze[row+1][col] == PASSAGE:
                 to_visit.append((row+1, col))
+                self.next[row][col] = (row+1, col)
             # left 
             if col > 1 and self.maze[row][col-1] == PASSAGE:
                 to_visit.append((row, col-1))
+                self.next[row][col] = (row, col-1)
             # up
             if row > 1 and self.maze[row-1][col] == PASSAGE:
                 to_visit.append((row-1, col))
+                self.next[row][col] = (row-1, col)
             current = to_visit.pop(0)
             pygame.time.wait(1)
             self.draw()
             pygame.display.flip()
         self.maze[current[0]][current[1]] = VISITED
+        # self.adj[current[0]][current[1]] = (, col)
         return current
 
 runner = maze_runner(51, 51)
