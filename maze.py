@@ -58,7 +58,7 @@ class maze_runner:
 
     def draw_path(self, path):
         for tile in path:
-            pygame.draw.rect(self.display, (230, 189, 39), pygame.Rect(round(tile[0]*8), 
+            pygame.draw.rect(self.display, (0, 255, 34), pygame.Rect(round(tile[0]*8), 
                 round(tile[1]*8), round(8), round(8)))
 
     def recursive_division(self):
@@ -127,6 +127,7 @@ class maze_runner:
 
         self.maze[current[0]][current[1]] = VISITED
 
+        # find shortest path
         path = []
         if self.adj[end[0]][end[1]] != None:
             current = end 
