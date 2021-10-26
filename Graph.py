@@ -15,13 +15,13 @@ class path_heap:
     
     def heapup(self, i):
         current = i 
-        parent = (i-1)//2
+        parent = (i-1) >> 1
 
         while current > 0:
             if self.heap[current].distance() < self.heap[parent].distance():
                 self.heap[current], self.heap[parent] = self.heap[parent], self.heap[current]
             current = parent
-            parent = (current-1)//2
+            parent = (current-1) >> 1
 
     def heapdown(self):
         for i in range(0, len(self.heap)):
