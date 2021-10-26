@@ -63,11 +63,15 @@ class Maze:
                     pygame.draw.rect(self.display, Color.wall, 
                         pygame.Rect(row*8, col*8, 8, 8))
 
-    def draw_path(self, path):
+    def draw_path(self, start, dest, path):
         rects = []
         for tile in path:
             rects.append(pygame.draw.rect(self.display, Color.path, 
                 pygame.Rect(tile[0]*8, tile[1]*8, 8, 8)))
+        rects.append(pygame.draw.rect(self.display, Color.start, 
+            pygame.Rect(start[0]*8, start[1]*8, 8, 8)))
+        rects.append(pygame.draw.rect(self.display, Color.dest, 
+            pygame.Rect(dest[0]*8, dest[1]*8, 8, 8)))
         return rects
 
     def draw_sd(self, start, dest):
@@ -195,13 +199,11 @@ class Maze:
 
                 current = to_visit.pop(0)
                 pygame.display.update(rects)
-                pygame.time.wait(10)
+                pygame.time.wait(3)
             else:
                 break
 
         self.grid[current[0]][current[1]] = Tile.visited
-        pygame.draw.rect(self.display, Color.visited, 
-            pygame.Rect(current[0]*8, current[1]*8, 8, 8))
 
         # find shortest path
         path = []
@@ -221,7 +223,9 @@ class Display:
         self.height = height
         self.maze = Maze(self.display, width, height)
         self.maze.gen_prim()
-        self.path = self.maze.dfs_visual((1, 1), (width - 2, height - 2))
+        self.start = (1, 1)
+        self.dest = (width // 2, height//2)
+        self.path = self.maze.dfs_visual(self.start, self.dest)
 
     def main(self):
         running = True 
@@ -229,15 +233,14 @@ class Display:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-            self.maze.draw_path(self.path)
-            self.maze.draw_sd((1, 1), (self.width - 2, self.height - 2))
+            self.maze.draw_path(self.start, self.dest, self.path)
             pygame.display.flip()
             pygame.time.wait(100)
 
 if __name__ == '__main__':
-    runner = Display(51, 51)
-    # pygame.display.update(runner.maze.flush())
-    # runner.maze.draw()
-    # pygame.display.flip()
+    runner = Display(71, 51)
+    runner.maze.flush()
+    runner.maze.draw()
+    pygame.display.flip()
     runner.main()
 
