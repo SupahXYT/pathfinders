@@ -2,7 +2,7 @@ import pyglet
 from random import random
 
 class Maze:
-    def __init__(self, batch, width, height):
+    def __init__(self, ctx, width, height):
         
             self.width = width 
             self.height = height
