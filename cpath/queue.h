@@ -7,21 +7,30 @@ struct __qnode {
   int data;
 };
 
-typedef struct __qnode *node;
+typedef struct __qnode *__node;
 
-node __new_node(int data);
-void __delete_node(struct __qnode *self);
+__node __new_node(int data);
+void __delete_node(__node self);
 
-typedef struct queue {
-  node head;
+typedef struct __intern_queue {
+  __node head;
+} __intern_queue;
 
-  void (*push)(struct queue *, int);
-  int (*pop)(struct queue *);
-} queue;
+typedef struct _Queue_struct {
+  __intern_queue *q;
 
-queue *new_queue(void);
-void delete_queue(queue *self);
+  void (*push)(_Queue_struct *, int);
+  int (*pop)(struct _Queue_struct *);
+} _Queue_struct;
 
-void __queue_push(queue *self, int data);
-int __queue_pop(queue *self);
-void print_queue(queue *self);
+typedef _Queue_struct *Queue;
+
+__intern_queue *__new_intern_queue(void);
+void __delete_queue(__intern_queue *self);
+void __intern_queue_push(__intern_queue *self, int data);
+int __intern_queue_pop(__intern_queue *self);
+
+Queue newQueue(void);
+void deleteQueue(Queue self);
+void __Queue_push(Queue *self, int data);
+int __Queue_pop(Queue *self);

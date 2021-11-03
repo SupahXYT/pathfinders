@@ -2,15 +2,15 @@
 #include <stdio.h>
 
 int main(void) {
-  queue *q = new_queue();
+  Queue que = new_queue();
 
   for (int i = 0; i < 10; i++) {
-    q->push(q, i);
+    que->push(que, i);
   }
 
-  print_queue(q);
-
-  for (int i = 0; i < 11; i++) {
-    printf("pop: %d\n", q->pop(q));
+  for (int i = 0; i < 10; i++) {
+    printf("pop: %d\n", que->pop(que));
   }
+
+  delete_queue(que);
 }
