@@ -1,17 +1,19 @@
 #include <stdlib.h>
 
-struct Qnode {
-  struct Qnode *next;
-  struct Qnode *prev;
+struct __qnode {
+  struct __qnode *next;
+  struct __qnode *prev;
 
   int data;
 };
 
-struct Qnode *new_node(int data);
-void delete_node(struct Qnode *self);
+typedef struct __qnode *node;
+
+node __new_node(int data);
+void __delete_node(struct __qnode *self);
 
 typedef struct queue {
-  struct Qnode *head;
+  node head;
 
   void (*push)(struct queue *, int);
   int (*pop)(struct queue *);
@@ -20,6 +22,6 @@ typedef struct queue {
 queue *new_queue(void);
 void delete_queue(queue *self);
 
-void _Queue_push(queue *self, int data);
-int _Queue_pop(queue *self);
+void __queue_push(queue *self, int data);
+int __queue_pop(queue *self);
 void print_queue(queue *self);
