@@ -54,15 +54,17 @@ int __queue_pop(queue *self) {
 
   } else if (self->head->prev == self->head) {
     int data = self->head->data;
+
     __delete_node(self->head);
     self->head = NULL;
     return data;
 
   } else {
     node popped = self->head->prev;
+    int data = popped->data;
+
     self->head->prev = popped->prev;
     popped->prev->next = popped->next;
-    int data = popped->data;
     __delete_node(popped);
 
     return data;
