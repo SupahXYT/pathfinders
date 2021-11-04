@@ -1,4 +1,5 @@
 #include "queue.h"
+#include <callback.h>
 #include <errno.h>
 #include <stdio.h>
 
@@ -13,15 +14,13 @@ __node __new_node(int data) {
 
 void __delete_node(__node self) { free(self); }
 
-__intern_queue *new_queue(void) {
+__intern_queue *__new_intern_queue(void) {
   __intern_queue *new = malloc(sizeof(__intern_queue));
   new->head = NULL;
-  new->push = __queue_push;
-  new->pop = __queue_pop;
   return new;
 }
 
-void delete_queue(queue *self) {
+void __delete_intern_queue(__intern_queue *self) {
   __node curr = self->head;
 
   while (curr != NULL) {
@@ -33,7 +32,7 @@ void delete_queue(queue *self) {
   free(self);
 }
 
-void __queue_push(queue *self, int data) {
+void __intern_queue_push(__intern_queue *self, int data) {
   if (self->head == NULL) {
     self->head = __new_node(data);
     self->head->next = self->head;
@@ -50,7 +49,7 @@ void __queue_push(queue *self, int data) {
   }
 }
 
-int __queue_pop(queue *self) {
+int __intern_queue_pop(__intern_queue *self) {
   if (self->head == NULL) {
     fprintf(stderr, "\033[0;31merror\033[0m: "
                     "no more elements in queue\n");
@@ -76,3 +75,19 @@ int __queue_pop(queue *self) {
     return data;
   }
 }
+
+Queue newQueue(void) {
+  Queue new;
+  new.intern_queue = __new_intern_queue();
+
+  new.push = alloc_callback(&__Queue_push, &new);
+  new.pop = alloc_callback(&__Queue_pop, &new);
+
+  return new;
+}
+
+void __Queue_push(Queue *self, int data) {
+  __intern_queue_push(self->intern_queue, data);
+}
+
+int __Queue_pop(Queue *self) { return __intern_queue_pop(self->intern_queue); }
