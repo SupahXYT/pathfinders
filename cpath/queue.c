@@ -1,7 +1,7 @@
 #include "queue.h"
-#include <callback.h>
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 extern int errno;
 
@@ -24,6 +24,8 @@ void __delete_intern_queue(__intern_queue *self) {
   __node curr = self->head;
 
   while (curr != NULL) {
+    __node prev = curr->prev;
+    prev->next = NULL;
     __node next = curr->next;
     __delete_node(curr);
     curr = next;
@@ -37,7 +39,6 @@ void __intern_queue_push(__intern_queue *self, int data) {
     self->head = __new_node(data);
     self->head->next = self->head;
     self->head->prev = self->head;
-
   } else {
     __node last = self->head->prev;
     __node new = __new_node(data);
@@ -54,8 +55,8 @@ int __intern_queue_pop(__intern_queue *self) {
     fprintf(stderr, "\033[0;31merror\033[0m: "
                     "no more elements in queue\n");
     exit(-1);
-
   } else if (self->head->prev == self->head) {
+
     int data = self->head->data;
     __delete_node(self->head);
     self->head = NULL;
@@ -80,11 +81,13 @@ Queue newQueue(void) {
   Queue new;
   new.intern_queue = __new_intern_queue();
 
-  new.push = alloc_callback(&__Queue_push, &new);
-  new.pop = alloc_callback(&__Queue_pop, &new);
+  new.push = __Queue_push;
+  new.pop = __Queue_pop;
 
   return new;
 }
+
+void deleteQueue(Queue self) { __delete_intern_queue(self.intern_queue); }
 
 void __Queue_push(Queue *self, int data) {
   __intern_queue_push(self->intern_queue, data);

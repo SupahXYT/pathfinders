@@ -1,5 +1,3 @@
-#include <stdlib.h>
-
 struct __qnode {
   struct __qnode *next;
   struct __qnode *prev;

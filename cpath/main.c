@@ -5,12 +5,12 @@ int main(void) {
   Queue que = newQueue();
 
   for (int i = 0; i < 10; i++) {
-    que.push(i);
+    que.push(&que, i);
   }
 
-  for (int i = 0; i < 10; i++) {
-    que.pop();
-  }
+  /* for (int i = 0; i < 10; i++) { */
+  /*   que.pop(&que); */
+  /* } */
 
-  /* delete_queue(que); */
+  deleteQueue(que);
 }
