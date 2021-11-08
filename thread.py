@@ -7,7 +7,7 @@ class Useful:
         self.list = []
 
     def random(self):
-        for i in range(5):
+        for i in range(15):
             self.list.append(random())
             sleep(1)
 
@@ -26,9 +26,9 @@ class Visualize:
 
     # 'draw' function
     def print(self):
-        for i in self.use.list:
-            print(f'{i} ', end ='')
-        print()
+        while(len(self.use.list) > 0):
+            element = self.use.list.pop(0)
+            print(element)
 
 if __name__ == '__main__':
     v = Visualize()

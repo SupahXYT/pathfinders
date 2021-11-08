@@ -224,7 +224,7 @@ class Display:
         self.maze = Maze(self.display, width, height)
         self.maze.gen_prim()
         self.start = (1, 1)
-        self.dest = (width // 2, height//2)
+        self.dest = (width - 2, height - 2)
         self.path = self.maze.dfs_visual(self.start, self.dest)
 
     def main(self):
