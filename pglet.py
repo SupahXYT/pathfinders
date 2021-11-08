@@ -1,35 +1,20 @@
 import pyglet
-from random import random
-
-class Maze:
-    def __init__(self, ctx, width, height):
-        
-            self.width = width 
-            self.height = height
-            self.grid = [[0 for i in range(height)] for j in range(width)]
-            self.randomize()
-
-    def randomize(self):
-        for row in range(self.width):
-            for col in range (self.height):
-                self.grid[row][col] = round(random())
-
-    def draw(self):
-        grid_map = pyglet.graphics.Batch()
-        grid_map.draw()
+import maze_engine
 
 class HelloWorldWindow(pyglet.window.Window):
     def __init__(self):
         super().__init__(width = 500, height = 500, caption = "amodu")
-        self.maze = Maze(self.batch, 100, 100)
+        self.maze = maze_engine.Maze(100, 100)
 
-
+        self.label = pyglet.text.Label('Hello, world',
+                          font_name='Times New Roman',
+                          font_size=36,
+                          x=self.height//2, y=self.width//2)
 
     def on_draw(self):
         self.clear()
         self.label.draw()
-        self.maze.draw()
-
+        self.circle.draw()
 
 if __name__ == '__main__':
     window = HelloWorldWindow()
