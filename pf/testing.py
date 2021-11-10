@@ -122,7 +122,10 @@ class Maze:
 
 
 
+import numpy as np
+import matplotlib as plt
 
+a = np.arange(1, 20)
 
 setup = """
 import maze_engine
