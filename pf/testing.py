@@ -1,4 +1,4 @@
-import pyglet, time, threading
+import pyglet, time, threading, timeit
 from random import randrange
 
 class Tile:
@@ -111,80 +111,53 @@ class Maze:
 
         return path
 
-class Display(pyglet.window.Window):
-    def __init__(self):
-        self.w, self.h = 51, 51 
-        super().__init__(width = self.w*8, height = self.h*8, caption = "amodu")
-        self.maze = Maze(self.w, self.h)
-        pyglet.clock.schedule_interval(self.update, 1.0/60)
-        self.shapes = []
-        t1 = threading.Thread(target=self.maze.gen_prim)
-        t1.start()
 
-    def on_draw(self):
-        # self.clear()
-        vertices = []; colors = [];
-        for row in range(self.maze.width):
-            for col in range(self.maze.height):
 
-                x, y = row*8, col*8
-                vertices.append(x)
-                vertices.append(y)
-                vertices.append(x)
-                vertices.append(y+8)
-                vertices.append(x+8)
-                vertices.append(y+8)
-                vertices.append(x+8)
-                vertices.append(y)
 
-                # Three color values, four vertices for every quad
-                if self.maze.grid[row][col] == Tile.wall:
-                    for i in range(12):
-                        colors.append(25)
-                else: 
-                    for i in range(12):
-                        colors.append(255)
 
-        # for tile in self.maze.update:
-#         tiles = 0
-#         while len(self.maze.update) > 0:
-#             row, col = self.maze.update.pop(0)
-#             x, y = row*8, col*8
-#             vertices.append(x)
-#             vertices.append(y)
-#             vertices.append(x)
-#             vertices.append(y+8)
-#             vertices.append(x+8)
-#             vertices.append(y+8)
-#             vertices.append(x+8)
-#             vertices.append(y)
 
-#             # Three color values, four vertices for every quad
-#             if self.maze.grid[row][col] == Tile.wall:
-#                 for i in range(12):
-#                     colors.append(25)
-#             else: 
-#                 for i in range(12):
-#                     colors.append(255)
-#             tiles += 1
 
-        vertex_list = pyglet.graphics.vertex_list(self.maze.width*self.maze.height*4, 
-            ('v2i', vertices),
-            ('c3B', colors))
 
-        vertex_list.draw(pyglet.gl.GL_QUADS)
 
-    def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
-        pass
-        # print(f'{x}, {y}: {buttons}')
 
-    def update(self, dt):
-        pass
 
-    def draw_tile(self, row, col, size):
-        pass
 
+
+
+setup = """
+import maze_engine
+maze = maze_engine.Maze(501, 501)
+"""
+
+code = """
+vertices = []; colors = [];
+for row in range(maze.width):
+    for col in range(maze.height):
+
+        x, y = row*8, col*8
+        vertices.append(x)
+        vertices.append(y)
+        vertices.append(x)
+        vertices.append(y+8)
+        vertices.append(x+8)
+        vertices.append(y+8)
+        vertices.append(x+8)
+        vertices.append(y)
+
+        # Three color values, four vertices for every quad
+        if maze.grid[row][col] == maze_engine.Tile.wall:
+            for i in range(12):
+                colors.append(25)
+        else: 
+            for i in range(12):
+                colors.append(255)
+"""
+
+num = 10
 if __name__ == '__main__':
-    window = Display()
-    pyglet.app.run()
+    print(f'average: {timeit.timeit(setup=setup, stmt=code, number=num)/num}')
+
+    # 3.8 milliseconds for 51x51
+    # 16.6 milliseconds for 101x101
+    # 70 ms for 201x201
 
