@@ -1,4 +1,4 @@
-import pyglet, time, threading
+import pyglet, time, threading, hello
 from random import randrange
 
 class Tile:
@@ -120,59 +120,40 @@ class Display(pyglet.window.Window):
         self.shapes = []
         t1 = threading.Thread(target=self.maze.gen_prim)
         t1.start()
-
-    def on_draw(self):
-        # self.clear()
-        vertices = []; colors = [];
+        self.vertices = []
         for row in range(self.maze.width):
             for col in range(self.maze.height):
 
                 x, y = row*8, col*8
-                vertices.append(x)
-                vertices.append(y)
-                vertices.append(x)
-                vertices.append(y+8)
-                vertices.append(x+8)
-                vertices.append(y+8)
-                vertices.append(x+8)
-                vertices.append(y)
+                self.vertices.append(x)
+                self.vertices.append(y)
+                self.vertices.append(x)
+                self.vertices.append(y+8)
+                self.vertices.append(x+8)
+                self.vertices.append(y+8)
+                self.vertices.append(x+8)
+                self.vertices.append(y)
 
-                # Three color values, four vertices for every quad
-                if self.maze.grid[row][col] == Tile.wall:
-                    for i in range(12):
-                        colors.append(25)
-                else: 
-                    for i in range(12):
-                        colors.append(255)
+    def on_draw(self):
+        self.clear()
 
-        # for tile in self.maze.update:
-#         tiles = 0
-#         while len(self.maze.update) > 0:
-#             row, col = self.maze.update.pop(0)
-#             x, y = row*8, col*8
-#             vertices.append(x)
-#             vertices.append(y)
-#             vertices.append(x)
-#             vertices.append(y+8)
-#             vertices.append(x+8)
-#             vertices.append(y+8)
-#             vertices.append(x+8)
-#             vertices.append(y)
-
-#             # Three color values, four vertices for every quad
-#             if self.maze.grid[row][col] == Tile.wall:
-#                 for i in range(12):
-#                     colors.append(25)
-#             else: 
-#                 for i in range(12):
-#                     colors.append(255)
-#             tiles += 1
-
-        vertex_list = pyglet.graphics.vertex_list(self.maze.width*self.maze.height*4, 
-            ('v2i', vertices),
-            ('c3B', colors))
+        vertex_list = pyglet.graphics.vertex_list(self.maze.width*self.maze.height*4,
+            ('v2f', self.vertices),
+            ('c3B', self.colors()))
 
         vertex_list.draw(pyglet.gl.GL_QUADS)
+
+    def colors(self):
+        colors = []
+        for i in range(self.w):
+            for j in range(self.h):
+                if self.maze.grid[i][j] == Tile.wall:
+                    for k in range(12):
+                        colors.append(255)
+                else:
+                    for k in range(12):
+                        colors.append(25)
+        return colors
 
     def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
         pass
